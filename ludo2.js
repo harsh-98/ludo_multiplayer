@@ -7,6 +7,23 @@ var k = 0,
     allow_part = 1;
 var x1 = 0;
 var user1, user2, user3, user4;
+ var socket=io();
+  socket.emit("moved");
+
+$(document).ready(function(){
+    var name=prompt("ENTER YOUR NAME");
+     if (name != null) {
+         socket.emit("user_name",name);
+    }
+   
+});
+socket.on("player_assigned",function(player_number){
+    alert("You are assigned player " + player_number);
+});
+socket.on("endgame",function(player_name){
+    alert(" " + player_name + "left the game so bye bye");
+    window.close();
+});
 
 
 function user(color, position_array, parts_in, color_half, starting_position) {
@@ -173,9 +190,13 @@ var game = {
             console.log(key_num);
         }
         if (key_num == 66) {
-            no = document.getElementById('roll').value;
+            no=parseInt(document.getElementById('roll').value);
+            
+            document.getElementById('roll').value="";
             document.getElementById("roll").blur();
-            console.log(key_num);
+           
+             allow = 1;
+        allow_part = 1;
         }
 
     },
@@ -203,6 +224,16 @@ var game = {
             //allow_part=0;
         }
     },
+won:function(){
+    if(user1){
+        for(i=01;i<=4;i++){
+            if(user1.position_array[i]>105) 
+                socket.emit("won",socket);
+
+                  }
+    }
+}
+    ,
     move: function() {
         if (allow == 1) {
             var t = 0;
@@ -266,10 +297,11 @@ var game = {
                     if (t == 26 && color == "blue") t = 401;
 
                     if (t == 39 && color == "yellow") t = 301;
+                                if (!(t > 405 || (t > 105 && t < 200) || (t > 205 && t < 300) || (t > 305 && t < 400))) {
 
                     setTimeout(function(y, color, sel) {
                         general_operation.make(y, color, sel);
-                    }.bind(this, t, color, sel), 500 * i);
+                    }.bind(this, t, color, sel), 500 * i);}
                 }
             }
             if (!(t > 405 || (t > 105 && t < 200) || (t > 205 && t < 300) || (t > 305 && t < 400))) {
@@ -300,7 +332,7 @@ var game = {
                             general_operation.lose_part(t, ele_2_die, user4);
                         }
 
-                    }).bind(this, turn, t), 500 * i - 250);
+                    }).bind(this, turn, t), 500 * i - 250);}
                 switch (turn) {
                     case 0:
                         user1.position_array[sel] = t;
@@ -318,10 +350,10 @@ var game = {
 
 
 
-                if (no != 6)
+                if (no != 6  )
                     game.next_player();
                 sel = 1;
-            }
+            
         }
     },
     next_player: function() {
