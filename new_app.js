@@ -26,9 +26,12 @@ io.sockets.on("connection",function(socket){
 	SOCKET_LIST[num_player]=socket;
 	
 	socket.on("disconnect",function(){
+		console.log(SOCKET_LIST.length);
 		var endgame_user=socket.user_name;
+		if(socket.user_name!=null)
 		for (var i in SOCKET_LIST){
 			console.log("dele");
+			
 			SOCKET_LIST[i].emit("endgame",endgame_user);
 			delete SOCKET_LIST[i];
 			
@@ -36,20 +39,67 @@ io.sockets.on("connection",function(socket){
 		}
 		num_player=0;
 		
-		console.log(SOCKET_LIST);
+		//console.log(SOCKET_LIST);
 	});
 		socket.on("user_name",function(user_name){
 			socket.user_name=user_name;
-			socket.id=num_player;
-		num_player++;for (var i in SOCKET_LIST){
+			socket.num=num_player;
+			num_player++;
+			console.log(socket.id);
+		for (var i in SOCKET_LIST){
 			console.log(SOCKET_LIST[i].user_name);
 			
 
 		}
 			console.log(socket.user_name);
-			socket.emit("player_assigned",num_player);
+			socket.emit("this_player_assigned",num_player);
+		});
+		socket.on("players_given",function(data){
+
+			for(var i in SOCKET_LIST){
+				SOCKET_LIST[i].emit("no_of_player",data);
+				console.log("data sent"+data,SOCKET_LIST[i].user_name);
+
+			}
+		});
+		socket.on("roll",function(data){
+
+			for(var i in SOCKET_LIST){
+				SOCKET_LIST[i].emit("roll_emit",data);
+				//console.log("data sent"+data,SOCKET_LIST[i].user_name);
+
+			}
+		});
+		socket.on("choose",function(data){
+
+			for(var i in SOCKET_LIST){
+				console.log(data);
+				SOCKET_LIST[i].emit("choose_emit",data);
+				//console.log("data sent"+data,SOCKET_LIST[i].user_name);
+
+			}
+		});
+		socket.on("won",function(data){
+			var name=null;
+			for (var i in SOCKET_LIST){
+				if(SOCKET_LIST[i].id==data){
+					name=SOCKET_LIST[i].user_name;
+				}
+			}
+			console.log(SOCKET_LIST);
+			for(var i in SOCKET_LIST){
+				SOCKET_LIST[i].emit("won_emit",name);
+				//console.log("data sent"+data,SOCKET_LIST[i].user_name);
+			}
 		});
 
 
 	
 });
+/*setInterval(function(){
+	for (var i in SOCKET_LIST){
+		if(SOCKET_LIST[i].user_name==null){
+			delete SOCKET_LIST[i];
+		}
+	}
+},10);*/
