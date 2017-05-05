@@ -21,6 +21,7 @@ var player_id = 0;
 $(document).ready(function() {
     var name = prompt("ENTER YOUR NAME");
     if (name != null) {
+        socket.user_name=name;
         socket.emit("user_name", name);
     }
 
@@ -30,6 +31,9 @@ $(document).ready(function() {
 
 
 // socket function and  on emit 
+socket.on("data_receive",function(data){
+    document.getElementById("demo").innerHTML=data;
+});
 socket.on("this_player_assigned", function(player_number) {
     alert("You are assigned player " + player_number);
     player_id = player_number;
@@ -59,7 +63,9 @@ socket.on("won_emit", function(data_) {
     alert(data_ + " won the game ");
     console.log("a");
 });
-
+socket.on("allow_part_emit",function(data){
+    game.allow_new_part(data);
+});
 // socket end
 
 
@@ -199,49 +205,50 @@ var game = {
     uniKeyCode: function(event) {
         var key_num = event.keyCode;
         ////console.log(key_num);
+        var jk="";
         if (key_num == 82) {
             game.roll();
-            document.getElementById("demo").innerHTML = "rolling the dice";
+            jk = "rolling the dice";
         }
         if (key_num == 78) {
             game.allow_new_part();
-            document.getElementById("demo").innerHTML = "allowing new part";
+            jk = "allowing new part";
         }
         if (key_num == 96) {
             game.pass();
-            document.getElementById("demo").innerHTML = "passed the chance to the new player";
+            jk = "passed the chance to the new player";
         }
         if (key_num == 70) {
             document.getElementById("user").focus();
             document.getElementById("user").value = "";
-            document.getElementById("demo").innerHTML = "enter the number of players";
+            jk = "enter the number of players";
 
         }
         if (key_num == 83) {
             game.user_assign();
             document.getElementById("user").value = "";
             document.getElementById("user").blur();
-            document.getElementById("demo").innerHTML = "the number of players is selected";
+            jk = "the number of players is selected";
 
         }
         if (key_num == 97) {
             game.choose(1);
-            document.getElementById("demo").innerHTML = "moving the part 1";
+            jk = "moving the part 1";
 
         }
         if (key_num == 98) {
             game.choose(2);
-            document.getElementById("demo").innerHTML = "moving the part 2";
+            jk = "moving the part 2";
 
         }
         if (key_num == 99) {
             game.choose(3);
-            document.getElementById("demo").innerHTML = "moving the part 3";
+            jk = "moving the part 3";
 
         }
         if (key_num == 100) {
             game.choose(4);
-            document.getElementById("demo").innerHTML = "moving the part 4";
+            jk = "moving the part 4";
 
         }
 
@@ -264,12 +271,16 @@ var game = {
             allow_part = 1;
 
         }
+socket.emit("data_send",{jk:jk,move_num:no});
+//socket.emit("data_send",{jk:jk,id:player_id});
 
 
     },
 
 
-    allow_new_part: function() {
+    allow_new_part: function(allow_new_part_check=100) {
+        if (allow_new_part_check==100 ){
+            console.log("data");
         if (no == 6 && allow_part == 1) {
             switch (turn) {
                 case 0:
@@ -286,11 +297,37 @@ var game = {
                     general_operation.del_insert(user4);
                     break;
             }
-
+            socket.emit("allow_part",player_id);
+            allow=0;
+                    allow_part=0;
+                    x1 = 0;
             //next_player();
             //allow_part=0;
+        }}
+        else{console.log("dataa");
+            if (no == 6 && allow_part == 1 )if( player_id!=allow_new_part_check) {
+            switch (turn) {
+                case 0:
+                    general_operation.del_insert(user1);
+                    break;
+                case 1:
+                    general_operation.del_insert(user2);
+                    break;
+                case 2:
+                    general_operation.del_insert(user3);
+
+                    break;
+                case 3:
+                    general_operation.del_insert(user4);
+                    break;
+
+            }
+            allow=0;
+                    allow_part=0;
+                    x1 = 0;
         }
-    },
+    }
+},
     which_user: function() {
         switch (player_id) {
             case 1:
@@ -541,6 +578,6 @@ $(document).ready(function() {
     document.querySelector("#body").addEventListener("keyup", game.uniKeyCode);
 
 
-    document.querySelector("#roll_crack").addEventListener("click", game.roll_cracked);
+    //document.querySelector("#roll_crack").addEventListener("click", game.roll_cracked);
 });
 //EventListener end
