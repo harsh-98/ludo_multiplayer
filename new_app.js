@@ -39,26 +39,27 @@ io.sockets.on("connection",function(socket){
 		}
 		num_player=0;
 		
-		//console.log(SOCKET_LIST);
+		console.log(SOCKET_LIST);
 	});
 		socket.on("user_name",function(user_name){
 			socket.user_name=user_name;
 			socket.num=num_player;
 			num_player++;
-			console.log(socket.id);
+
+			console.log(SOCKET_LIST);
 		for (var i in SOCKET_LIST){
-			console.log(SOCKET_LIST[i].user_name);
+			//console.log(SOCKET_LIST[i].user_name);
 			
 
 		}
-			console.log(socket.user_name);
+			//console.log(socket.user_name);
 			socket.emit("this_player_assigned",num_player);
 		});
 		socket.on("players_given",function(data){
 
 			for(var i in SOCKET_LIST){
 				SOCKET_LIST[i].emit("no_of_player",data);
-				console.log("data sent"+data,SOCKET_LIST[i].user_name);
+				//console.log("data sent"+data,SOCKET_LIST[i].user_name);
 
 			}
 		});
@@ -73,7 +74,7 @@ io.sockets.on("connection",function(socket){
 		socket.on("choose",function(data){
 
 			for(var i in SOCKET_LIST){
-				console.log(data);
+				//console.log(data);
 				SOCKET_LIST[i].emit("choose_emit",data);
 				//console.log("data sent"+data,SOCKET_LIST[i].user_name);
 
@@ -86,14 +87,35 @@ io.sockets.on("connection",function(socket){
 					name=SOCKET_LIST[i].user_name;
 				}
 			}
-			console.log(SOCKET_LIST);
+			//console.log(SOCKET_LIST);
 			for(var i in SOCKET_LIST){
 				SOCKET_LIST[i].emit("won_emit",name);
 				//console.log("data sent"+data,SOCKET_LIST[i].user_name);
 			}
 		});
+		socket.on("data_send",function(data){
+			//for (var i in SOCKET_LIST){
+//				//console.log(SOCKET_LIST[i].num==data.id);
+//				if(SOCKET_LIST[i].num==2){
+//					name=SOCKET_LIST[i].user_name;
+//}			}
+			for(var i in SOCKET_LIST){
+				console.log(data);
+				var c=data.jk+" by "+ socket.user_name;
+				if(data.move_num!=0){c+=" the dice roll gives  "+ data.move_num;}
+				SOCKET_LIST[i].emit("data_receive",c);
+				//console.log("data sent"+data,SOCKET_LIST[i].user_name);
 
+			}
+		});
 
+		socket.on("allow_part",function(data){
+			for(var i in SOCKET_LIST){
+				console.log("emitted");
+				SOCKET_LIST[i].emit("allow_part_emit",data);
+				//console.log("data sent"+data,SOCKET_LIST[i].user_name);
+			}
+		});
 	
 });
 /*setInterval(function(){
