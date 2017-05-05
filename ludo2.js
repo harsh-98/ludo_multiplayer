@@ -4,82 +4,144 @@ var k = 0,
     player_assign_allow = 1,
     sel = 1,
     no = 0,
+    //allow_part allows u to move the new part and by allow_part and no==6 if assigned then allow_part is ==0
+    // allow to move part
+    // used for the choose to be allowed only when roll has been perform first
+    // after rolling move part , choose part and allow_new_part can happen
     allow_part = 1;
 var x1 = 0;
 var user1, user2, user3, user4;
- var socket=io();
-  socket.emit("moved");
+var socket = io();
+//socket.emit("moved");
+var player_id = 0;
 
-$(document).ready(function(){
-    var name=prompt("ENTER YOUR NAME");
-     if (name != null) {
-         socket.emit("user_name",name);
+
+
+// user name prompt
+$(document).ready(function() {
+    var name = prompt("ENTER YOUR NAME");
+    if (name != null) {
+        socket.emit("user_name", name);
     }
-   
+
 });
-socket.on("player_assigned",function(player_number){
+// user anme prompt end 
+
+
+
+// socket function and  on emit 
+socket.on("this_player_assigned", function(player_number) {
     alert("You are assigned player " + player_number);
-});
-socket.on("endgame",function(player_name){
-    alert(" " + player_name + "left the game so bye bye");
-    window.close();
+    player_id = player_number;
 });
 
 
-function user(color, position_array, parts_in, color_half, starting_position) {
+socket.on("endgame", function(player_name) {
+    var confirmation = confirm(" " + player_name + "  left the game so ,, \n Do you want to start a new game ??");
+    if (confirmation == true)
+        game.new_game();
+});
+
+
+socket.on("no_of_player", function(data_) {
+    //console.log(data1);
+    k = data_;
+    game.user_assign(0);
+});
+socket.on("roll_emit", function(data_) {
+    no = data_;
+    game.roll(0);
+});
+socket.on("choose_emit", function(data_) {
+    game.choose(data_);
+});
+socket.on("won_emit", function(data_) {
+    alert(data_ + " won the game ");
+    console.log("a");
+});
+
+// socket end
+
+
+
+// user defined 
+function user(color, position_array, parts_in, color_half, starting_position, id_of_player) {
     this.color = color;
     this.position_array = position_array;
     this.starting_position = starting_position;
     this.parts_in = parts_in;
     this.color_half = color_half;
+    this.id_of_player = id_of_player;
 
 }
 
+//user assignment end
+
+
+//games feature function 
 var game = {
-    roll: function() {
-        if (x1 == 0) {
-            no = Math.ceil(Math.random() * 6);
-            document.getElementById("roll").value = no;
-        } else if (x1 == 20) {
-            document.getElementById("roll").value = no;
-            x1 = 0;
+    roll: function(emit = 1) {
+        console.log(turn + 1 == player_id);
+        if (emit && turn + 1 == player_id) {
+            if (x1 == 0) {
+                no = Math.ceil(Math.random() * 6);
+                document.getElementById("roll").value = no;
+                x1 = 10;
+                socket.emit("roll", no);
+            } else if (x1 == 20) {
+                document.getElementById("roll").value = no;
+
+                socket.emit("roll", no);
+
+
+            }
         }
         allow = 1;
         allow_part = 1;
+
     },
+
+
     roll_god: function() {
         no = 6;
         x1 = 20;
+         socket.emit("roll", no);       
     },
     roll_cracked: function() {
         no = document.getElementById("roll").value;
         allow = 1;
         allow_part = 1;
+
     },
-    user_assign: function() {
+    user_assign: function(emit = 1) {
+
         if (player_assign_allow == 1) {
-            k = parseInt(document.getElementById("user").value);
+            if (document.getElementById("user").value)
+                k = parseInt(document.getElementById("user").value);
+
+            if (emit == 1)
+                socket.emit("players_given", k);
             switch (k) {
                 case 4:
-                    user4 = new user("yellow", [0, 40, 40, 40, 40, 0, 0, 0, 0], 4, "yel-", 40);
+                    user4 = new user("yellow", [0, 40, 40, 40, 40, 0, 0, 0, 0], 4, "yel-", 40, 4);
                     general_operation.dead("yel-1");
                     user4.position_array[5] = 1;
                     general_operation.make("40", user4.color);
                     //user4_playing_parts--;
                 case 3:
-                    user3 = new user("blue", [0, 27, 27, 27, 27, 0, 0, 0, 0], 4, "blu-", 27);
+                    user3 = new user("blue", [0, 27, 27, 27, 27, 0, 0, 0, 0], 4, "blu-", 27, 3);
                     general_operation.dead("blu-1");
                     general_operation.make("27", user3.color);
                     user3.position_array[5] = 1;
                     //user3_playing_parts--;
                 case 2:
-                    user2 = new user("red", [0, 14, 14, 14, 14, 0, 0, 0, 0], 4, "red-", 14);
+                    user2 = new user("red", [0, 14, 14, 14, 14, 0, 0, 0, 0], 4, "red-", 14, 2);
                     general_operation.dead("red-1");
                     general_operation.make("14", user2.color);
                     user2.position_array[5] = 1;
                     //user2_playing_parts--;
                 case 1:
-                    user1 = new user("green", [0, 1, 1, 1, 1, 0, 0, 0, 0], 4, "gre-", 1);
+                    user1 = new user("green", [0, 1, 1, 1, 1, 0, 0, 0, 0], 4, "gre-", 1, 1);
                     general_operation.dead("gre-1");
                     general_operation.make("1", user1.color);
                     user1.position_array[5] = 1;
@@ -96,7 +158,8 @@ var game = {
         window.location = "ludo2.html";
     },
     choose: function(x) {
-        if (user1) {
+        if (allow == 1) {
+
             switch (turn) {
                 case 0:
                     var arr = user1.position_array;
@@ -127,12 +190,15 @@ var game = {
                 sel = 4;
                 game.move();
             }
-        }
 
+
+            socket.emit("choose", x);
+            allow = 0;
+        }
     },
     uniKeyCode: function(event) {
         var key_num = event.keyCode;
-        //console.log(key_num);
+        ////console.log(key_num);
         if (key_num == 82) {
             game.roll();
             document.getElementById("demo").innerHTML = "rolling the dice";
@@ -178,26 +244,27 @@ var game = {
             document.getElementById("demo").innerHTML = "moving the part 4";
 
         }
-        if (key_num == 66) {
-            game.roll_cracked();
+
+        // 6 is out come
+        if (key_num == 90) {
+            game.roll_god();
+            //console.log(key_num);
         }
+        // enter the no of move
         if (key_num == 65) {
             document.getElementById("roll").focus();
             document.getElementById("roll").value = "";
         }
-        if (key_num == 90) {
-            game.roll_god();
-            console.log(key_num);
-        }
         if (key_num == 66) {
-            no=parseInt(document.getElementById('roll').value);
-            
-            document.getElementById('roll').value="";
+            no = parseInt(document.getElementById('roll').value);
+            socket.emit("roll", no);
+            document.getElementById('roll').value = "";
             document.getElementById("roll").blur();
-           
-             allow = 1;
-        allow_part = 1;
+            allow = 1;
+            allow_part = 1;
+
         }
+
 
     },
 
@@ -224,18 +291,38 @@ var game = {
             //allow_part=0;
         }
     },
-won:function(){
-    if(user1){
-        for(i=01;i<=4;i++){
-            if(user1.position_array[i]>105) 
-                socket.emit("won",socket);
-
-                  }
-    }
-}
-    ,
+    which_user: function() {
+        switch (player_id) {
+            case 1:
+                return user1;
+                break;
+            case 2:
+                return user2;
+                break;
+            case 3:
+                return user3;
+                break;
+            case 4:
+                return user4;
+                break;
+        }
+    },
+    won: function() {
+        console.log("hi");
+        user_decided = game.which_user();
+        if (user_decided) {
+            var j = 0;
+            for (i = 1; i <= 4; i++) {
+                if (user_decided.position_array[i] > player_id * 100 + 5) {
+                    j++;
+                    console.log("hi");
+                }
+                if (j == 4) socket.emit("won", socket.id);
+            }
+        }
+    },
     move: function() {
-        if (allow == 1) {
+        if (allow == 1 && no) {
             var t = 0;
             var color = "";
             switch (turn) {
@@ -260,7 +347,7 @@ won:function(){
                     color1 = "rgb(255, 255, 0)";
                     break;
             }
-            console.log(t);
+            console.log(turn);
 
             for (i = 1; i <= no; i++) {
                 if (!(t > 405 || (t > 105 && t < 200) || (t > 205 && t < 300) || (t > 305 && t < 400))) {
@@ -268,15 +355,19 @@ won:function(){
                     setTimeout(
                         (function(x, sel) {
                             var ele_color = document.getElementById(x.toString());
+                            //console.log(x.toString());
+                            //console.log(ele_color);
                             for (i = 0; i < ele_color.childNodes.length; i++) {
-                                console.log(color1);
-                                console.log($(ele_color.childNodes[i]).css("background-color"));
+                                ////console.log(color1);
+                                ////console.log($(ele_color.childNodes[i]).css("background-color"));
                                 if (ele_color.childNodes[i].innerHTML == sel && $(ele_color.childNodes[i]).css("background-color") == color1) {
+
+                                    //console.log(color1);
                                     ele = ele_color.childNodes[i];
                                     break;
                                 }
                             }
-                            console.log(ele);
+                            //console.log(ele);
                             document.getElementById(x.toString()).removeChild(ele);
 
                         }).bind(this, t, sel), 500 * i - 250);
@@ -297,11 +388,12 @@ won:function(){
                     if (t == 26 && color == "blue") t = 401;
 
                     if (t == 39 && color == "yellow") t = 301;
-                                if (!(t > 405 || (t > 105 && t < 200) || (t > 205 && t < 300) || (t > 305 && t < 400))) {
+                    if (!(t > 405 || (t > 105 && t < 200) || (t > 205 && t < 300) || (t > 305 && t < 400))) {
 
-                    setTimeout(function(y, color, sel) {
-                        general_operation.make(y, color, sel);
-                    }.bind(this, t, color, sel), 500 * i);}
+                        setTimeout(function(y, color, sel) {
+                            general_operation.make(y, color, sel);
+                        }.bind(this, t, color, sel), 500 * i);
+                    }
                 }
             }
             if (!(t > 405 || (t > 105 && t < 200) || (t > 205 && t < 300) || (t > 305 && t < 400))) {
@@ -332,28 +424,35 @@ won:function(){
                             general_operation.lose_part(t, ele_2_die, user4);
                         }
 
-                    }).bind(this, turn, t), 500 * i - 250);}
-                switch (turn) {
-                    case 0:
-                        user1.position_array[sel] = t;
-                        break;
-                    case 1:
-                        user2.position_array[sel] = t;
-                        break;
-                    case 2:
-                        user3.position_array[sel] = t;
-                        break;
-                    case 3:
-                        user4.position_array[sel] = t;
-                        break;
-                }
+                    }).bind(this, turn, t), 500 * i - 250);
+            }
+            switch (turn) {
+                case 0:
+                    user1.position_array[sel] = t;
+                    break;
+                case 1:
+                    user2.position_array[sel] = t;
+                    break;
+                case 2:
+                    user3.position_array[sel] = t;
+                    break;
+                case 3:
+                    user4.position_array[sel] = t;
+                    break;
+            }
 
 
 
-                if (no != 6  )
-                    game.next_player();
-                sel = 1;
-            
+            if (no != 6)
+                game.next_player();
+            sel = 1;
+            console.log("hiii");
+            x1 = 0;
+            no = 0;
+            setTimeout(function() {
+                game.won();
+                console.log(i);
+            }, i * 500 + 500);
         }
     },
     next_player: function() {
@@ -366,10 +465,13 @@ won:function(){
 
 
 };
+// games feature end
 
+
+// general operations 
 var general_operation = {
     make: function(y, color_, sel = 1, i = 0) {
-        console.log(sel);
+        //console.log(sel);
         var a = document.createElement("div");
         if (i == 0)
             $(a).addClass("circle").css("background-color", color_);
@@ -408,7 +510,7 @@ var general_operation = {
         }
     },
     lose_part: function(t, ele_2_die, user_name) {
-        console.log(t);
+        //console.log(t);
         general_operation.dead_last(t);
         user_name.position_array[ele_2_die] = 1;
         general_operation.make(user_name.color_half + ele_2_die, user_name.color, ele_2_die);
@@ -416,8 +518,10 @@ var general_operation = {
         user_name.parts_in++;
     }
 };
+//general operations end
 
 
+// Event Listener  are added 
 $(document).ready(function() {
     document.querySelector("#roll_button").addEventListener("click", game.roll);
     document.querySelector("#assign_user").addEventListener("click", game.user_assign);
@@ -436,5 +540,7 @@ $(document).ready(function() {
     });
     document.querySelector("#body").addEventListener("keyup", game.uniKeyCode);
 
+
     document.querySelector("#roll_crack").addEventListener("click", game.roll_cracked);
 });
+//EventListener end
