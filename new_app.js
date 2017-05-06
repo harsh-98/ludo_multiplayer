@@ -18,6 +18,7 @@ console.log("hi there");
 
 var SOCKET_LIST={};
 var num_player=0;
+var array=[0,0,0,0];
 var io=require("socket.io")(serv,{});
 io.sockets.on("connection",function(socket){
 	
@@ -34,7 +35,8 @@ io.sockets.on("connection",function(socket){
 			
 			SOCKET_LIST[i].emit("endgame",endgame_user);
 			delete SOCKET_LIST[i];
-			
+			for(i=0;i<4;i++)
+				array[i]=0;
 
 		}
 		num_player=0;
@@ -42,13 +44,16 @@ io.sockets.on("connection",function(socket){
 		console.log(SOCKET_LIST);
 	});
 		socket.on("user_name",function(user_name){
+
 			socket.user_name=user_name;
 			socket.num=num_player;
+			array[num_player]=user_name;
 			num_player++;
 
 			console.log(SOCKET_LIST);
 		for (var i in SOCKET_LIST){
 			//console.log(SOCKET_LIST[i].user_name);
+			SOCKET_LIST[i].emit("player_name",array);
 			
 
 		}
