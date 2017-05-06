@@ -66,6 +66,29 @@ socket.on("won_emit", function(data_) {
 socket.on("allow_part_emit",function(data){
     game.allow_new_part(data);
 });
+socket.on("player_name",function(array_emit){
+    console.log("addd");
+    var data_="";
+for(i=0;i<4;i++){
+    
+    switch(i){
+        case 0:
+        if (array_emit[i]!=0)data_+="user1=green  --"+array_emit[i]+" <br>";
+        break;
+        case 1:
+        if (array_emit[i]!=0)data_+="user2=red  --"+array_emit[i]+" <br>";
+        break;
+        case 2:
+        if (array_emit[i]!=0)data_+="user3=blue  --"+array_emit[i]+" <br>";
+        break;
+        case 3:
+        if (array_emit[i]!=0)data_+="user4=yellow  --"+array_emit[i]+" <br>";
+        break;
+
+    }
+    
+}document.getElementById('player_name').innerHTML=data_;
+});
 // socket end
 
 
@@ -204,6 +227,15 @@ var game = {
     },
     uniKeyCode: function(event) {
         var key_num = event.keyCode;
+        if (key_num == 83) {
+            game.user_assign();
+            document.getElementById("user").value = "";
+            document.getElementById("user").blur();
+            jk = "the number of players is selected";
+
+        }
+        if(turn+1==player_id){
+        
         ////console.log(key_num);
         var jk="";
         if (key_num == 82) {
@@ -224,13 +256,7 @@ var game = {
             jk = "enter the number of players";
 
         }
-        if (key_num == 83) {
-            game.user_assign();
-            document.getElementById("user").value = "";
-            document.getElementById("user").blur();
-            jk = "the number of players is selected";
-
-        }
+        
         if (key_num == 97) {
             game.choose(1);
             jk = "moving the part 1";
@@ -274,7 +300,7 @@ var game = {
 socket.emit("data_send",{jk:jk,move_num:no});
 //socket.emit("data_send",{jk:jk,id:player_id});
 
-
+}
     },
 
 
