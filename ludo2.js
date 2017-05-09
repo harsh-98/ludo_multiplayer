@@ -234,6 +234,12 @@ var game = {
             jk = "the number of players is selected";
 
         }
+         if (key_num == 70) {
+            document.getElementById("user").focus();
+            document.getElementById("user").value = "";
+            jk = "enter the number of players";
+
+        }
         if(turn+1==player_id){
         
         ////console.log(key_num);
@@ -250,12 +256,7 @@ var game = {
             game.pass();
             jk = "passed the chance to the new player";
         }
-        if (key_num == 70) {
-            document.getElementById("user").focus();
-            document.getElementById("user").value = "";
-            jk = "enter the number of players";
-
-        }
+       
         
         if (key_num == 97) {
             game.choose(1);
