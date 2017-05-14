@@ -13,7 +13,7 @@ var x1 = 0;
 var user1, user2, user3, user4;
 var socket = io();
 //socket.emit("moved");
-var player_id = 0;
+var player_id = 0,rolling_allow=1;
 
 
 
@@ -111,7 +111,7 @@ function user(color, position_array, parts_in, color_half, starting_position, id
 var game = {
     roll: function(emit = 1) {
         console.log(turn + 1 == player_id);
-        if (emit && turn + 1 == player_id) {
+        if (emit && turn + 1 == player_id && rolling_allow==1) {
             if (x1 == 0) {
                 no = Math.ceil(Math.random() * 6);
                 document.getElementById("roll").value = no;
@@ -127,7 +127,7 @@ var game = {
         }
         allow = 1;
         allow_part = 1;
-
+        rolling_allow=0;
     },
 
 
@@ -460,10 +460,10 @@ socket.emit("data_send",{jk:jk,move_num:no});
                     }
                 }
             }
-            if (!(t > 405 || (t > 105 && t < 200) || (t > 205 && t < 300) || (t > 305 && t < 400))) {
 
                 setTimeout(
                     (function(turn1, t) {
+            if (!(t > 405 || (t > 105 && t < 200) || (t > 205 && t < 300) || (t > 305 && t < 400))) {
                         if (document.getElementById(t).childNodes[1] != null)
                             var ele_2_die = document.getElementById(t).childNodes[1].innerHTML;
                         //us1p is like is for whether the player is playing or not
@@ -487,9 +487,10 @@ socket.emit("data_send",{jk:jk,move_num:no});
                         {
                             general_operation.lose_part(t, ele_2_die, user4);
                         }
-
+}  if (no != 6)
+                game.next_player();
                     }).bind(this, turn, t), 500 * i - 250);
-            }
+            
             switch (turn) {
                 case 0:
                     user1.position_array[sel] = t;
@@ -507,8 +508,8 @@ socket.emit("data_send",{jk:jk,move_num:no});
 
 
 
-            if (no != 6)
-                game.next_player();
+           
+            allow=0;
             sel = 1;
             console.log("hiii");
             x1 = 0;
@@ -522,6 +523,7 @@ socket.emit("data_send",{jk:jk,move_num:no});
     next_player: function() {
         allow = 0;
         turn++;
+        rolling_allow=1;
         turn %= k;
     }
 
