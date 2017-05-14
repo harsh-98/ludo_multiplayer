@@ -11,6 +11,9 @@ app.get("/ludo.css",function(req,res){
 app.get("/ludo2.html",function(req,res){
 	res.sendFile(__dirname+"/ludo2.html");
 });
+app.get("/",function(req,res){
+        res.sendFile(__dirname+"/ludo2.html");
+});
 app.get("/ludo2.js",function(req,res){
 	res.sendFile(__dirname+"/ludo2.js");
 });
