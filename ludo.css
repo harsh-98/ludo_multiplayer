@@ -8,7 +8,9 @@
   width: 90vmin;
   height: 90vmin;
   background-color: blue;
-  border: solid black .3vmin; }
+  border: solid black .3vmin;
+   box-sizing:content-box;
+}
 
 .a {
   float: left;
