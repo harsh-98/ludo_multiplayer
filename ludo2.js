@@ -1,3 +1,5 @@
+
+
 var k = 0,
     turn = 0,
     allow = 1,
@@ -15,6 +17,15 @@ var socket = io();
 //socket.emit("moved");
 var player_id = 0,rolling_allow=1;
 
+//entering a room 
+
+
+socket.on('connect', function() {
+   // Connected, let's sign-up for to receive messages for this room
+   socket.emit('room', location.hash.split("#").pop());
+});
+
+// entering a room
 
 
 // user name prompt
@@ -39,7 +50,9 @@ socket.on("this_player_assigned", function(player_number) {
     player_id = player_number;
 });
 
-
+socket.on("namespace",function(data){
+    history.pushState(null, null,"#"+data);
+});
 socket.on("endgame", function(player_name) {
     var confirmation = confirm(" " + player_name + "  left the game so ,, \n Do you want to start a new game ??");
     if (confirmation == true)
@@ -381,7 +394,7 @@ socket.emit("data_send",{jk:jk,move_num:no});
                     j++;
                     console.log("hi");
                 }
-                if (j == 4) socket.emit("won", socket.id);
+                if (j == 4) socket.emit("won", socket.user_name);
             }
         }
     },
@@ -610,3 +623,10 @@ $(document).ready(function() {
     //document.querySelector("#roll_crack").addEventListener("click", game.roll_cracked);
 });
 //EventListener end
+
+function intr_handler(a=0){
+    if (a==0)
+    document.getElementById("intrs").style.display="none";
+else if (a==1)
+    document.getElementById("intrs").style.display="none";
+}
