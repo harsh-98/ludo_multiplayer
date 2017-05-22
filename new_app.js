@@ -2,7 +2,7 @@ var express =require("express");
 var app=express();
 var serv=require("http").Server(app);
 var md5=require("md5");
-serv.listen(10101);
+serv.listen(process.env.PORT || 10101);
 //app.listen(10101);
 app.use("/assets",express.static("assets"));
 
