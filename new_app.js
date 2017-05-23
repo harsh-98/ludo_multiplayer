@@ -3,6 +3,7 @@ var app=express();
 var serv=require("http").Server(app);
 var md5=require("md5");
 serv.listen(process.env.PORT || 10101);
+console.log(process.env.PORT);
 //app.listen(10101);
 app.use("/assets",express.static("assets"));
 
@@ -42,7 +43,7 @@ io.sockets.on("connection",function(socket){
 	
 	
 	socket.on("disconnect",function(){
-		console.log(SOCKET_ROOM[socket.room].length);
+		//console.log(SOCKET_ROOM[socket.room].length);
 		var endgame_user=socket.user_name;
 			io.sockets.in(socket.room).emit("endgame",socket.user_name);
 		if(socket.user_name!=null)
