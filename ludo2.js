@@ -16,6 +16,7 @@ var user1, user2, user3, user4;
 var socket = io();
 //socket.emit("moved");
 var player_id = 0,rolling_allow=1;
+var allow_tousethechance_after_current_move=1;
 
 //entering a room 
 
@@ -253,7 +254,7 @@ var game = {
             jk = "enter the number of players";
 
         }
-        if(turn+1==player_id){
+        if(turn+1==player_id && allow_tousethechance_after_current_move){
         
         ////console.log(key_num);
         var jk="";
@@ -398,6 +399,7 @@ socket.emit("data_send",{jk:jk,move_num:no});
         }
     },
     move: function() {
+        allow_tousethechance_after_current_move=0;
         if (allow == 1 && no) {
             var t = 0;
             var color = "";
@@ -501,6 +503,8 @@ socket.emit("data_send",{jk:jk,move_num:no});
                         }
 }  if (no != 6)
                 game.next_player();
+                 no = 0;
+                 allow_tousethechance_after_current_move=1;
                     }).bind(this, turn, t), 500 * i - 250);
             
             switch (turn) {
@@ -534,7 +538,7 @@ socket.emit("data_send",{jk:jk,move_num:no});
         }
     },
     next_player: function() {
-        no = 0;
+       
         turn++;
         turn %= k;
     }
