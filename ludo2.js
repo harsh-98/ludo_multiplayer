@@ -37,7 +37,7 @@ $(document).ready(function() {
     }
 
 });
-// user anme prompt end 
+// user name prompt end 
 
 
 
@@ -197,7 +197,7 @@ var game = {
         turn = (turn + 1) % k;
     },
     new_game: function() {
-        window.location = "ludo2.html";
+        window.location = "/ludo2.html";
     },
     choose: function(x) {
         if (allow == 1) {
@@ -338,9 +338,7 @@ socket.emit("data_send",{jk:jk,move_num:no});
                     break;
             }
             socket.emit("allow_part",player_id);
-            allow=0;
-                    allow_part=0;
-                    x1 = 0;
+            
             //next_player();
             //allow_part=0;
         }}
@@ -362,11 +360,12 @@ socket.emit("data_send",{jk:jk,move_num:no});
                     break;
 
             }
-            allow=0;
-                    allow_part=0;
-                    x1 = 0;
         }
     }
+                    allow=0;
+                    allow_part=0;
+                    x1 = 0;
+                    rolling_allow=1;
 },
     which_user: function() {
         switch (player_id) {
@@ -526,7 +525,8 @@ socket.emit("data_send",{jk:jk,move_num:no});
             sel = 1;
             console.log("hiii");
             x1 = 0;
-            no = 0;
+           
+            rolling_allow=1;
             setTimeout(function() {
                 game.won();
                 console.log(i);
@@ -534,9 +534,8 @@ socket.emit("data_send",{jk:jk,move_num:no});
         }
     },
     next_player: function() {
-        allow = 0;
+        no = 0;
         turn++;
-        rolling_allow=1;
         turn %= k;
     }
 
