@@ -198,7 +198,7 @@ var game = {
         turn = (turn + 1) % k;
     },
     new_game: function() {
-        window.location = "/ludo2.html";
+        window.location = "/";
     },
     choose: function(x) {
         if (allow == 1) {
@@ -220,23 +220,30 @@ var game = {
             if (x == 1 && arr[5] == 1) {
                 sel = 1;
                 game.move();
+                socket.emit("choose", x);
+            allow = 0;
             }
             if (x == 2 && arr[6] == 1) {
                 sel = 2;
                 game.move();
+                socket.emit("choose", x);
+            allow = 0;
             }
             if (x == 3 && arr[7] == 1) {
                 sel = 3;
                 game.move();
+                socket.emit("choose", x);
+            allow = 0;
             }
             if (x == 4 && arr[8] == 1) {
                 sel = 4;
                 game.move();
+                socket.emit("choose", x);
+            allow = 0;
             }
 
 
-            socket.emit("choose", x);
-            allow = 0;
+            
         }
     },
     uniKeyCode: function(event) {
