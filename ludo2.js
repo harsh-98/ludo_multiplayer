@@ -83,6 +83,7 @@ socket.on("allow_part_emit",function(data){
 socket.on("player_name",function(array_emit){
     console.log("addd");
     var data_="";
+
 for(i=0;i<4;i++){
     
     switch(i){
@@ -105,7 +106,9 @@ for(i=0;i<4;i++){
 });
 // socket end
 
-
+socket.on("pass_received",function(data){
+    game.pass();
+});
 
 // user defined 
 function user(color, position_array, parts_in, color_half, starting_position, id_of_player) {
@@ -194,8 +197,14 @@ var game = {
         }
         player_assign_allow = 0;
     },
+
     pass: function() {
+        console.log("pass");
         turn = (turn + 1) % k;
+        rolling_allow=1;
+        allow=1;
+        allow_tousethechance_after_current_move=1;
+
     },
     new_game: function() {
         window.location = "/";
@@ -274,7 +283,7 @@ var game = {
             jk = "allowing new part";
         }
         if (key_num == 96) {
-            game.pass();
+            socket.emit("pass", null);
             jk = "passed the chance to the new player";
         }
        
@@ -564,6 +573,7 @@ var general_operation = {
         var a = document.createElement("div");
         if (i == 0)
             $(a).addClass("circle").css("background-color", color_);
+        $(a).attr("onclick", "handler("+sel.toString()+")");
         $(a).text(sel);
         var y_node = document.getElementById(y);
 
@@ -640,3 +650,4 @@ function intr_handler(a=0){
 else if (a==1)
     document.getElementById("intrs").style.display="none";
 }
+
