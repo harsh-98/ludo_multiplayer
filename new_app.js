@@ -123,6 +123,11 @@ io.sockets.on("connection",function(socket){
 			
 		});
 
+		socket.on("pass", function(data){
+			console.log("passed");
+			io.sockets.in(socket.room).emit("pass_received", data);
+		});
+
 		socket.on("allow_part",function(data){
 			
 				console.log("emitted");
