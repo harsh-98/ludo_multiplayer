@@ -651,3 +651,7 @@ else if (a==1)
     document.getElementById("intrs").style.display="none";
 }
 
+function handler(selector){
+ game.choose(selector);
+}
+
