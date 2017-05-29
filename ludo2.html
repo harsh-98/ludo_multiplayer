@@ -29,10 +29,10 @@
    
    
    <div style="width:28vmin;height:28vmin;margin:auto;margin-top:4vmin;background-color: white;">
-    <div id="gre-4" ><div>4</div></div>
-    <div id="gre-3" ><div>3</div></div>
-    <div id="gre-2" ><div>2</div></div>
-    <div id="gre-1" ><div>1</div></div>
+    <div id="gre-4" ><div onclick="allow_handler(4, 'green')">4</div></div>
+    <div id="gre-3" ><div onclick="allow_handler(3, 'green')">3</div></div>
+    <div id="gre-2" ><div onclick="allow_handler(2, 'green')">2</div></div>
+    <div id="gre-1" ><div onclick="allow_handler(1, 'green')">1</div></div>
   </div>
    </div>
    <div id="top">
@@ -58,10 +58,10 @@
    <div id="ne">
      
 <div style="width:28vmin;height:28vmin;margin:auto;margin-top:4vmin;background-color: white;">
-    <div id="yel-4" ><div>4</div></div>
-    <div id="yel-3" ><div>3</div></div>
-    <div id="yel-2" ><div>2</div></div>
-    <div id="yel-1" ><div>1</div></div>
+    <div id="yel-4" ><div onclick="allow_handler(4, 'yellow')">4</div></div>
+    <div id="yel-3" ><div onclick="allow_handler(3, 'yellow')">3</div></div>
+    <div id="yel-2" ><div onclick="allow_handler(2, 'yellow')">2</div></div>
+    <div id="yel-1" ><div onclick="allow_handler(1, 'yellow')">1</div></div>
   </div>
    </div>
    <div id="left">
@@ -120,10 +120,10 @@
    <div id="sw">
      
      <div style="width:28vmin;height:28vmin;margin:auto;margin-top:4vmin;background-color: white;">
-    <div id="red-4" ><div>4</div></div>
-    <div id="red-3" ><div>3</div></div>
-    <div id="red-2"  ><div>2</div></div>
-    <div id="red-1" ><div>1</div></div>
+    <div id="red-4" ><div onclick="allow_handler(4, 'red')">4</div></div>
+    <div id="red-3" ><div onclick="allow_handler(3, 'red')">3</div></div>
+    <div id="red-2" ><div onclick="allow_handler(2, 'red')">2</div></div>
+    <div id="red-1" ><div onclick="allow_handler(1, 'red')">1</div></div>
   </div>
    </div>
 <div id="bottom">
@@ -148,10 +148,10 @@
    </div> 
    <div id="se">
      <div style="width:28vmin;height:28vmin;margin:auto;margin-top:4vmin;background-color: white;">
-    <div id="blu-4" ><div>4</div></div>
-    <div id="blu-3" ><div>3</div></div>
-    <div id="blu-2" ><div>2</div></div>
-    <div id="blu-1" ><div>1</div></div>
+    <div id="blu-4" ><div onclick="allow_handler(4, 'blue')">4</div></div>
+    <div id="blu-3" ><div onclick="allow_handler(3, 'blue')">3</div></div>
+    <div id="blu-2" ><div onclick="allow_handler(2, 'blue')">2</div></div>
+    <div id="blu-1" ><div onclick="allow_handler(1, 'blue')">1</div></div>
   </div>
 
    </div>
@@ -176,7 +176,7 @@
     <button id="instr" onclick="instr_handler()">instructions</button>
 
   </div>
-  <div style="position: absolute;top:10vmin;right:1vmin; border:solid 1px black;padding: 6px;" >
+  <div style="position: absolute;top:10vmin;right:1vmin; border:solid 1px black;padding: 6px;display:none;" >
   <h1>INSTRUCTIONS --</h1>
   <br><hr>
    r- roll <br><br>
