@@ -279,7 +279,7 @@ var game = {
             jk = "rolling the dice";
         }
         if (key_num == 78) {
-            game.allow_new_part();
+            socket.emit("allow_part",0);
             jk = "allowing new part";
         }
         if (key_num == 96) {
@@ -335,50 +335,23 @@ socket.emit("data_send",{jk:jk,move_num:no});
     },
 
 
-    allow_new_part: function(allow_new_part_check=100) {
-        if (allow_new_part_check==100 ){
-            console.log("data");
+    allow_new_part: function(index_) {
         if (no == 6 && allow_part == 1) {
             switch (turn) {
                 case 0:
-                    general_operation.del_insert(user1);
+                    general_operation.del_insert(user1, index_);
                     break;
                 case 1:
-                    general_operation.del_insert(user2);
+                    general_operation.del_insert(user2, index_);
                     break;
                 case 2:
-                    general_operation.del_insert(user3);
-
+                    general_operation.del_insert(user3, index_);
                     break;
                 case 3:
-                    general_operation.del_insert(user4);
+                    general_operation.del_insert(user4, index_);
                     break;
-            }
-            socket.emit("allow_part",player_id);
-            
-            //next_player();
-            //allow_part=0;
-        }}
-        else{console.log("dataa");
-            if (no == 6 && allow_part == 1 )if( player_id!=allow_new_part_check) {
-            switch (turn) {
-                case 0:
-                    general_operation.del_insert(user1);
-                    break;
-                case 1:
-                    general_operation.del_insert(user2);
-                    break;
-                case 2:
-                    general_operation.del_insert(user3);
-
-                    break;
-                case 3:
-                    general_operation.del_insert(user4);
-                    break;
-
             }
         }
-    }
                     allow=0;
                     allow_part=0;
                     x1 = 0;
@@ -568,12 +541,15 @@ socket.emit("data_send",{jk:jk,move_num:no});
 
 // general operations 
 var general_operation = {
-    make: function(y, color_, sel = 1, i = 0) {
+    make: function(y, color_, sel = 1, i = 0,add_click_handling=0) {
         //console.log(sel);
         var a = document.createElement("div");
         if (i == 0)
             $(a).addClass("circle").css("background-color", color_);
-        $(a).attr("onclick", "handler("+sel.toString()+")");
+        if(add_click_handling==0)
+        $(a).attr("onclick", "handler("+sel.toString()+",'"+color_+"')");
+        else
+        $(a).attr("onclick", "allow_handler("+sel.toString()+",'"+color_+"')");
         $(a).text(sel);
         var y_node = document.getElementById(y);
 
@@ -593,9 +569,10 @@ var general_operation = {
     },
     /*del_insert check whether is there a part of the current player which is no out if there then
      del it and produce a part in the starting postion for the player*/
-    del_insert: function(user_name) {
+    del_insert: function(user_name, index_=0) {
         if (user_name.parts_in != 0) {
             user_name.parts_in--;
+            if(index_==0){
             for (i = 1; i <= 4; i++)
                 if (document.getElementById(user_name.color_half + i).childNodes[0] != null) {
                     user_name.position_array[i + 4] = 1;
@@ -603,7 +580,14 @@ var general_operation = {
 
                     general_operation.make(user_name.starting_position, user_name.color, i);
                     break;
+                }}
+            else{
+                if (document.getElementById(user_name.color_half + index_).childNodes[0] != null) {
+                    user_name.position_array[index_ + 4] = 1;
+                    general_operation.dead(user_name.color_half + index_);
+                    general_operation.make(user_name.starting_position, user_name.color, index_);
                 }
+            }
 
 
         }
@@ -612,7 +596,7 @@ var general_operation = {
         //console.log(t);
         general_operation.dead_last(t);
         user_name.position_array[ele_2_die] = 1;
-        general_operation.make(user_name.color_half + ele_2_die, user_name.color, ele_2_die);
+        general_operation.make(user_name.color_half + ele_2_die, user_name.color, ele_2_die,0, 1);
         user_name.position_array[sel1 + 4] = 0;
         user_name.parts_in++;
     }
@@ -651,7 +635,16 @@ else if (a==1)
     document.getElementById("intrs").style.display="none";
 }
 
-function handler(selector){
- game.choose(selector);
+function handler(selector,color_){
+   if(token(color_)) game.choose(selector);
 }
 
+function allow_handler(index_, color_){
+        if(token(color_)) socket.emit("allow_part",index_);
+}
+function token(color_){
+    var color_array=["","green", "red", "blue", "yellow"];
+    if(turn+1==player_id && allow_tousethechance_after_current_move)
+        if(color_array[player_id]==color_)return 1;
+            return 0;
+}
