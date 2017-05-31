@@ -1,7 +1,7 @@
 node_modules/
-a.txt
 app.js
 handle.js
 router.js
 server.js
 yarn-error.log
+doc_for_info
