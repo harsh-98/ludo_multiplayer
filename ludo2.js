@@ -608,19 +608,7 @@ var general_operation = {
 $(document).ready(function() {
     document.querySelector("#roll_button").addEventListener("click", game.roll);
     document.querySelector("#assign_user").addEventListener("click", game.user_assign);
-    document.querySelector("#allow_new_part").addEventListener("click", game.new_part);
-    document.querySelector("#choose_1").addEventListener("click", function() {
-        game.choose(1)
-    });
-    document.querySelector("#choose_2").addEventListener("click", function() {
-        game.choose(2)
-    });
-    document.querySelector("#choose_3").addEventListener("click", function() {
-        game.choose(3)
-    });
-    document.querySelector("#choose_4").addEventListener("click", function() {
-        game.choose(4)
-    });
+   
     document.querySelector("#body").addEventListener("keyup", game.uniKeyCode);
 
 
