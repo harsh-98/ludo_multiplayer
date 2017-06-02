@@ -19,11 +19,7 @@
 <body id="body"> 
 
 
-<div  style="position:fixed;width:10vw; padding:4vmin;" >
-<button onclick="game.new_game()">NEW GAME</button><div id="player_name"></div>
 
-
-</div>
  <div id="main">
    <div id="nw">
    
@@ -158,24 +154,22 @@
   
   
   </div>
-  <div style="z-index:1;position:absolute;top: 30vmin;left:1vmin;" id="intrs">
+  <div style="text-align:center" id="intrs">
   <div id="demo"></div>
 
   <input type="text" id="roll" size="5">
   <button  id="roll_button"> roll dice</button> 
-<br>
+
   <input type="text" id="user" size="5">
-  <button  id="assign_user" >Assign the number of the players</button><br>
-  <button  id="allow_new_part">Allow new part if 6</button><br>
-  <button id="choose_1">move part 1</button><br>
-  <button id="choose_2">move part 2</button><br>
-  <button id="choose_3">  move part 3</button><br>
-  <button id="choose_4">  move part 4</button><br>
-  
-  <button onclick="turn=(turn+1)%k;">pass</button>
+  <button  id="assign_user" >Assign the number of the players</button>
     <button id="instr" onclick="instr_handler()">instructions</button>
 
   </div>
+  <div  style="position:fixed;width:10vw; padding:4vmin;" >
+<button onclick="game.new_game()">NEW GAME</button><div id="player_name"></div>
+
+
+</div>
   <div style="position: absolute;top:10vmin;right:1vmin; border:solid 1px black;padding: 6px;display:none;" >
   <h1>INSTRUCTIONS --</h1>
   <br><hr>
