@@ -607,8 +607,8 @@ var general_operation = {
 // Event Listener  are added 
 $(document).ready(function() {
     document.querySelector("#roll_button").addEventListener("click", game.roll);
-    document.querySelector("#assign_user").addEventListener("click", game.user_assign);
-    document.querySelector("#body").addEventListener("keyup", game.uniKeyCode);
+    document.querySelector("#assign_user").addEventListener("click",function(){game.user_assign()});
+    document.querySelector("#body").addEventListener("keyup",game.uniKeyCode);
 
 
     //document.querySelector("#roll_crack").addEventListener("click", game.roll_cracked);
