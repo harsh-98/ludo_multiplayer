@@ -321,7 +321,7 @@ var game = {
 
         }
 socket.emit("data_send",{jk:jk,move_num:no});
-//socket.emit("data_send",{jk:jk,id:player_id});
+;//socket.emit("data_send",{jk:jk,id:player_id});
 
 }
     },
@@ -615,7 +615,9 @@ var general_operation = {
 // Event Listener  are added 
 $(document).ready(function() {
     document.querySelector("#roll_button").addEventListener("click",function(){ if(turn+1==player_id && allow_tousethechance_after_current_move){
-        game.roll();}});
+        game.roll();
+             socket.emit("data_send",{jk:"rolling the dice",move_num:no});
+      }  });
     document.querySelector("#assign_user").addEventListener("click",function(){game.user_assign()});
     document.querySelector("#body").addEventListener("keyup",game.uniKeyCode);
 
@@ -632,11 +634,17 @@ else if (a==1)
 }
 
 function handler(selector,color_){
-   if(token(color_)) game.choose(selector);
+   if(token(color_)) {game.choose(selector);
+    socket.emit("data_send",{jk:"moving the part "+sel.toString(),move_num:no});
+   }
 }
 
 function allow_handler(index_, color_){
-        if(token(color_)) socket.emit("allow_part",index_);
+        if(token(color_)) {socket.emit("allow_part",index_);
+        socket.emit("data_send",{jk:"allowing new part",move_num:no});
+
+    }
+
 }
 function token(color_){
     var color_array=["","green", "red", "blue", "yellow"];
