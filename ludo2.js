@@ -1,5 +1,3 @@
-
-
 var k = 0,
     turn = 0,
     allow = 1,
@@ -127,6 +125,7 @@ function user(color, position_array, parts_in, color_half, starting_position, id
 //games feature function 
 var game = {
     roll: function(emit = 1) {
+       if(player_assign_allow==0) {
         console.log(turn + 1 == player_id);
         if (emit && turn + 1 == player_id && rolling_allow==1) {
             if (x1 == 0) {
@@ -145,7 +144,7 @@ var game = {
         allow = 1;
         allow_part = 1;
         rolling_allow=0;
-    },
+   } },
 
 
     roll_god: function() {
@@ -226,33 +225,26 @@ var game = {
                     var arr = user4.position_array;
                     break;
             }
-            if (x == 1 && arr[5] == 1) {
+            if (x == 1 && arr[5] == 1 &&arr[5]!=2) {
                 sel = 1;
                 game.move();
                 socket.emit("choose", x);
-            allow = 0;
             }
-            if (x == 2 && arr[6] == 1) {
+            if (x == 2 && arr[6] == 1 &&arr[6]!=2) {
                 sel = 2;
                 game.move();
                 socket.emit("choose", x);
-            allow = 0;
             }
-            if (x == 3 && arr[7] == 1) {
+            if (x == 3 && arr[7] == 1 &&arr[7]!=2) {
                 sel = 3;
                 game.move();
                 socket.emit("choose", x);
-            allow = 0;
             }
-            if (x == 4 && arr[8] == 1) {
+            if (x == 4 && arr[8] == 1 &&arr[8]!=2) {
                 sel = 4;
                 game.move();
                 socket.emit("choose", x);
-            allow = 0;
             }
-
-
-            
         }
     },
     uniKeyCode: function(event) {
@@ -476,26 +468,42 @@ socket.emit("data_send",{jk:jk,move_num:no});
                                 if (user1 && turn1 != 0 && t == user1.position_array[sel1])
 
                         {
-                            general_operation.lose_part(t, ele_2_die, user1);
+                            general_operation.lose_part(t, ele_2_die, user1, 1);
                         } else if (user2 && turn1 != 1 && t == user2.position_array[sel1])
 
                         {
-                            general_operation.lose_part(t, ele_2_die, user2);
+                            general_operation.lose_part(t, ele_2_die, user2, 14);
                         } else if (user3 && turn1 != 2 && t == user3.position_array[sel1])
 
                         {
-                            general_operation.lose_part(t, ele_2_die, user3);
+                            general_operation.lose_part(t, ele_2_die, user3 ,27);
                         } else if (user4 && turn1 != 3 && t == user4.position_array[sel1])
 
                         {
-                            general_operation.lose_part(t, ele_2_die, user4);
+                            general_operation.lose_part(t, ele_2_die, user4, 40);
                         }
-}  if (no != 6)
+} 
+else{
+    switch (turn1){
+        case 0:
+        user1.position_array[sel+4]=2;
+        break;
+        case 1:
+        user2.position_array[sel+4]=2;
+        break;
+        case 2:
+        user3.position_array[sel+4]=2;
+        break;
+        case 3:
+        user4.position_array[sel+4]=2;
+        break;
+
+    }
+} if (no != 6)
                 game.next_player();
                  no = 0;
                  allow_tousethechance_after_current_move=1;
-                    }).bind(this, turn, t), 500 * i - 250);
-            
+                    }).bind(this, turn, t), 500 * i +250);
             switch (turn) {
                 case 0:
                     user1.position_array[sel] = t;
@@ -592,10 +600,10 @@ var general_operation = {
 
         }
     },
-    lose_part: function(t, ele_2_die, user_name) {
+    lose_part: function(t, ele_2_die, user_name,no__) {
         //console.log(t);
         general_operation.dead_last(t);
-        user_name.position_array[ele_2_die] = 1;
+        user_name.position_array[ele_2_die] = no__;
         general_operation.make(user_name.color_half + ele_2_die, user_name.color, ele_2_die,0, 1);
         user_name.position_array[sel1 + 4] = 0;
         user_name.parts_in++;
@@ -606,7 +614,8 @@ var general_operation = {
 
 // Event Listener  are added 
 $(document).ready(function() {
-    document.querySelector("#roll_button").addEventListener("click", game.roll);
+    document.querySelector("#roll_button").addEventListener("click",function(){ if(turn+1==player_id && allow_tousethechance_after_current_move){
+        game.roll();}});
     document.querySelector("#assign_user").addEventListener("click",function(){game.user_assign()});
     document.querySelector("#body").addEventListener("keyup",game.uniKeyCode);
 
