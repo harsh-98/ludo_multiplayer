@@ -492,7 +492,6 @@ socket.emit("data_send",{jk:jk,move_num:no});
                         }
 }  if (no != 6)
                 game.next_player();
-            if (no==6)allow=1;
                  no = 0;
                  allow_tousethechance_after_current_move=1;
                     }).bind(this, turn, t), 500 * i - 250);
@@ -608,22 +607,17 @@ var general_operation = {
 // Event Listener  are added 
 $(document).ready(function() {
     document.querySelector("#roll_button").addEventListener("click", game.roll);
-    document.querySelector("#assign_user").addEventListener("click", function(){
-        game.user_assign();
-            document.getElementById("user").value = "";
-            document.getElementById("user").blur();
-            //jk = "the number of players is selected";
-    });
-    document.querySelector("#body").addEventListener("keyup", game.uniKeyCode);
-    
+    document.querySelector("#assign_user").addEventListener("click",function(){game.user_assign()});
+    document.querySelector("#body").addEventListener("keyup",game.uniKeyCode);
+
 
     //document.querySelector("#roll_crack").addEventListener("click", game.roll_cracked);
 });
 //EventListener end
 
-function intr_handler(a=0){
+function instr_handler(a=0){
     if (a==0)
-    document.getElementById("intrs").style.display="none";
+    document.getElementById("intrs").style.display="block";
 else if (a==1)
     document.getElementById("intrs").style.display="none";
 }

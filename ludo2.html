@@ -2,9 +2,10 @@
 <html>
 <head>
   <meta charset="UTF-8" />
-  <title>Document</title>
+  <title>Game</title>
   <link rel="stylesheet" href="ludo.css">
   <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!--<script src="/home/harsh/BACKUP/1/jQuery.js"></script>-->
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -18,8 +19,19 @@
 </head>
 <body id="body"> 
 
+<div class="wrapper">
+  <div class="row1">
 
+<div class="col-2" id="operations">
+  <div>
+    <center><button onclick="game.new_game()" class="btn btn-danger">NEW GAME</button></center>
+  </div>
+<center><input type="number" id="user" >
+<button  id="assign_user" class="btn btn-primary">Assign players</button>
+<div id="player_name"></div></center>
+</div>
 
+<div class="col-6">
  <div id="main">
    <div id="nw">
      <div style="width:28vmin;height:28vmin;margin:auto;margin-top:4vmin;background-color: white;">
@@ -146,41 +158,48 @@
   <div id="blu-2" ><div onclick="allow_handler(2, 'blue')">2</div></div>
   <div id="blu-1" ><div onclick="allow_handler(1, 'blue')">1</div></div>
 </div>
-
+</div>
+</div>
 </div>
 
+<div class="col-1 desktopdisplay"></div>
+<div style="text-align:center" id="intrsw" class="col-3">
 
-</div>
-<div style="text-align:center" id="intrs">
   <div id="demo"></div>
 
-  <input type="text" id="roll" size="5">
-  <button  id="roll_button"> roll dice</button> 
+  <input type="number" id="roll">
+  <button  id="roll_button" class="btn btn-success"> roll dice</button><br>
 
-  <input type="text" id="user" size="5">
-  <button  id="assign_user" >Assign the number of the players</button>
-  <button id="instr" onclick="instr_handler()">instructions</button>
-
-</div>
-<div  style="position:fixed;width:10vw; padding:4vmin;" >
-  <button onclick="game.new_game()">NEW GAME</button><div id="player_name"></div>
-
-
-</div>
-<div style="position: absolute;top:10vmin;right:1vmin; border:solid 1px black;padding: 6px;display:none;" >
+  <!--<input type="text" id="user">
+  <button  id="assign_user" >Assign the number of the players</button>-->
+  <button id="instr" onclick="instr_handler(0)" class="btn btn-info">instructions</button>
+  <div style="border:solid 1px black;padding: 6px;display:none; text-align: left;" id="intrs" >
   <h1>INSTRUCTIONS --</h1>
-  <br><hr>
-  r- roll <br><br>
-  n -for the new part  <br><br>
-  f - for entering the number of players <br><br>
-  s - for saving the number of the players entered <br><br>
-  numpad1 - for moving the part1 <br><br>
-  numpad2 - for moving the part2 <br><br>
-  numpad3 - for moving the part3 <br><br>
-  numpad4 - for moving the part4 <br><br>
-  numpad0 - for passing to the other person<br><br>
-  <button onclick="instr_handler(1);">get back</button>
+  <hr>
+  <div>
+    <h1>Game Rules</h1>
+    <ul>
+    <li>New part on 6</li>
+    <li>Get another chance on getting 6</li>
+    <li>No chance is awarded on killing other player part</li>
+    </ul>
+  </div>
+  <div class="desktopdisplay"><ul><li>r- roll </li>
+  <li>n -for the new part </li> 
+  <li>f - for entering the number of players</li> 
+  <li>s - for saving the number of the players entered </li>
+  <li>numpad1 - for moving the part1 </li>
+  <li>numpad2 - for moving the part2</li> 
+  <li>numpad3 - for moving the part3</li> 
+  <li>numpad4 - for moving the part4 </li>
+  <li>numpad0 - for passing to the other person</li></ul></div>
+  <button onclick="instr_handler(1);" class="btn btn-info">get back</button>
 </div>
+</div>
+
+</div>
+</div>
+
 
 </body>
 </html>

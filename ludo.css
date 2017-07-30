@@ -1,16 +1,14 @@
-* {
-  margin: 0px;
-  padding: 0px; }
 
 #main {
-  margin: auto;
-  margin-top: 5vh;
+  margin:auto;
+  margin:2vh 1vh 2vh 0vh;
   width: 90vmin;
   height: 90vmin;
-  background-color: blue;
+  
   border: solid black .3vmin;
-   box-sizing:content-box;
+  box-sizing:content-box;
 }
+
 
 .a {
   float: left;
@@ -118,4 +116,68 @@ button {
   width: 36vmin;
   background-color: white; }
 
+ /* conributed by divyanshu sahu */
+*{
+  box-sizing: border-box;
+}
+.row1::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+[class*="col-"] {
+  float: left;
+  padding: 15px;
+  width: 100%;
+}
+.wrapper{
+}
+#intrsw input, #operations input{
+  margin: 10px 5px;
+  width: 50px;
+  height: 32px;
+  font-size: 18px;
+}
+.desktopdisplay{
+  display: none;
+}
+
+
 /*# sourceMappingURL=ludo.css.map */
+
+
+@media only screen and (min-device-width: 600px) {
+  .col-1 {width: 8.33%;}
+  .col-2 {width: 16.66%;}
+  .col-3 {width: 25%;}
+  .col-4 {width: 33.33%;}
+  .col-5 {width: 41.66%;}
+  .col-6 {width: 50%;}
+  .col-7 {width: 58.33%;}
+  .col-8 {width: 66.66%;}
+  .col-9 {width: 75%;}
+  .col-10 {width: 83.33%;}
+  .col-11 {width: 91.66%;}
+  .col-12 {width: 100%;}
+
+  #intrsw, #operations{
+    margin:150px 0px;
+    height:500px;
+  }
+  #intrsw input, #operations input{
+  margin: 20px 5px;
+  }
+  #main{
+    margin:auto;
+    margin-top: 20px;
+  }
+  .wrapper{
+    padding: 0 200px;
+  }
+  .desktopdisplay{
+    display: inline-block;
+  }
+  #intrs{
+    margin-left: 40px;
+  }
+}
