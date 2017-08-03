@@ -76,7 +76,7 @@ button {
   margin: 3.6vmin 3.6vmin 3.6vmin; }
 
 #sw > div, #nw > div, #ne > div, #se > div {
-  box-sizing: border-box;
+  box-sizing:content-box;
   border: black solid .3vmin; }
 
 #sw, #sw > div > div, #sw > div > div > div {
